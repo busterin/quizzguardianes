@@ -5,19 +5,13 @@ body{
   font-family: Arial, sans-serif;
   text-align:center;
 
-  /* Fondo */
   background: url("images/fondo.jpg") no-repeat center center fixed;
   background-size: cover;
   min-height: 100vh;
 }
 
-.screen{
-  padding: 20px;
-}
-
-.hidden{
-  display:none;
-}
+.screen{ padding: 20px; }
+.hidden{ display:none; }
 
 h1, h2, label{
   color: #fff;
@@ -59,35 +53,20 @@ h1, h2, label{
   padding: 6px;
 }
 
+/* ✅ TOP BAR centrado + timer en esquina */
 #top-bar{
-  display:flex;
-  justify-content: space-between;
-  align-items:center;
-  padding: 10px 14px;
+  position: relative;
+  padding: 10px 14px 4px;
+  display: flex;
+  justify-content: center;
 }
 
-#teams-track{
-  display:flex;
-  gap: 10px;
-  align-items:center;
-  flex-wrap: wrap;
-  max-width: 70%;
-}
-
-.team-icon{
-  width: 44px;
-  height: 44px;
-  object-fit: contain;
-  border-radius: 10px;
-  background: rgba(255,255,255,0.75);
-  padding: 6px;
-
-  /* movimiento por pasos (simple) */
-  transform: translateX(var(--x));
-  transition: transform 250ms ease;
-}
-
+/* Timer fijo arriba a la derecha */
 #timer{
+  position: absolute;
+  right: 14px;
+  top: 10px;
+
   font-size: 22px;
   font-weight: 700;
   color: #fff;
@@ -97,12 +76,50 @@ h1, h2, label{
   border-radius: 12px;
 }
 
+/* Contenedor centrado de pista */
+#teams-track{
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+
+  /* Un poco de margen a la derecha para que el timer no estorbe en pantallas pequeñas */
+  padding-right: 90px;
+  max-width: min(900px, 96vw);
+}
+
+/* Iconos de equipos */
+.team-icon{
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.75);
+  padding: 6px;
+
+  transform: translateX(var(--x));
+  transition: transform 250ms ease;
+}
+
+/* ✅ La meta: queda "fija" al final */
+.goal-icon{
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  position: absolute;
+  top: 50%;
+  transform: translate(calc(var(--goal-x)), -50%);
+  pointer-events: none;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.35));
+}
+
 #question-box{
   margin: 20px auto 0;
   width: min(720px, 92vw);
   min-height: 260px;
 
-  /* Caja de texto con imagen */
   background: url("images/cajatexto.jpg") no-repeat center center;
   background-size: cover;
 
@@ -112,8 +129,6 @@ h1, h2, label{
   align-items:center;
   padding: 40px 30px;
   border-radius: 18px;
-
-  /* sombra suave para que destaque */
   box-shadow: 0 10px 30px rgba(0,0,0,0.35);
 }
 
@@ -139,6 +154,4 @@ h1, h2, label{
   cursor: pointer;
 }
 
-.btn:active{
-  transform: scale(0.98);
-}
+.btn:active{ transform: scale(0.98); }
