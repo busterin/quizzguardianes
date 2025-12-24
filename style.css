@@ -4,7 +4,6 @@ body{
   margin:0;
   font-family: Arial, sans-serif;
   text-align:center;
-
   background: url("images/fondo.jpg") no-repeat center center fixed;
   background-size: cover;
   min-height: 100vh;
@@ -34,23 +33,24 @@ h1, h2, label{
   filter: drop-shadow(0 10px 20px rgba(0,0,0,0.35));
 }
 
+/* Botón imagen */
 .img-btn{
   border: none;
   background: transparent;
   cursor: pointer;
   padding: 0;
+  z-index: 5;
+  position: relative;
 }
 .img-btn img{
   width: min(320px, 70vw);
   height: auto;
   display:block;
   filter: drop-shadow(0 10px 18px rgba(0,0,0,0.35));
+  pointer-events: none;
 }
-.img-btn:active{
-  transform: scale(0.98);
-}
+.img-btn:active{ transform: scale(0.98); }
 
-/* ===== Logos guardianes en pantallas ===== */
 .guardianes-top{
   width: min(360px, 70vw);
   height: auto;
@@ -105,16 +105,13 @@ h1, h2, label{
   position: relative;
   margin: 0 auto 6px;
   padding: 10px 0;
-
   display:flex;
   justify-content:center;
   align-items:center;
-
   background: rgba(0,0,0,0.25);
   backdrop-filter: blur(3px);
 }
 
-/* TIMER */
 #timer{
   position:absolute;
   right:16px;
@@ -128,42 +125,34 @@ h1, h2, label{
   border-radius: 12px;
 }
 
-/* RECORRIDO (sin carriles) */
 #teams-track{
   position: relative;
   width: min(820px, 92vw);
   height: 70px;
 }
 
-/* LOGOS: sin caja, misma línea */
 .team-icon{
   position: absolute;
   left: 0;
   top: 50%;
-
   width: 42px;
   height: 42px;
   object-fit: contain;
-
   background: none;
   padding: 0;
   border-radius: 0;
   box-shadow: none;
-
   transform: translate(var(--x), -50%);
   transition: transform 250ms ease;
 }
 
-/* META: al final */
 .goal-icon{
   position:absolute;
   left: 0;
   top: 50%;
-
   width: 56px;
   height: 56px;
   object-fit: contain;
-
   transform: translate(var(--goal-x), -50%);
   pointer-events:none;
   filter: drop-shadow(0 6px 10px rgba(0,0,0,0.45));
@@ -174,15 +163,12 @@ h1, h2, label{
   margin: 18px auto 0;
   width: min(760px, 92vw);
   min-height: 320px;
-
   background: url("images/cajatexto.jpg") no-repeat center center;
   background-size: cover;
-
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
-
   padding: 42px 34px;
   border-radius: 18px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.35);
@@ -202,7 +188,6 @@ h1, h2, label{
   width: min(620px, 90%);
   margin-top: 6px;
 }
-
 @media (min-width: 720px){
   .options{ grid-template-columns: 1fr 1fr; }
 }
@@ -215,20 +200,10 @@ h1, h2, label{
   cursor: pointer;
   text-align: left;
   background: rgba(255,255,255,0.92);
-  transition: transform 120ms ease;
 }
-
-.option-btn:active{ transform: scale(0.99); }
 .option-btn:disabled{ cursor: default; opacity: 0.98; }
-
-.option-btn.correct{
-  background: rgba(56, 178, 72, 0.90);
-  color: #fff;
-}
-.option-btn.wrong{
-  background: rgba(220, 38, 38, 0.90);
-  color: #fff;
-}
+.option-btn.correct{ background: rgba(56, 178, 72, 0.90); color:#fff; }
+.option-btn.wrong{ background: rgba(220, 38, 38, 0.90); color:#fff; }
 
 .feedback{
   min-height: 44px;
@@ -236,6 +211,26 @@ h1, h2, label{
   font-weight: 900;
   color: #111;
   max-width: 650px;
+}
+
+/* ===== FINAL + CONFETI ===== */
+.end-screen{
+  position: relative;
+  min-height: 100vh;
+}
+
+#confetti{
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.end-screen > *:not(#confetti){
+  position: relative;
+  z-index: 2;
 }
 
 /* Botón genérico */
