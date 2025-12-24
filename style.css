@@ -436,4 +436,21 @@ h1, h2, label{
 .start-screen .img-btn{
   order: 4;
 }
+/* =====================
+   ESPACIADO EXTRA – PANTALLA INICIO
+===================== */
+.start-screen{
+  gap: clamp(20px, 4vw, 36px); /* espacio general mayor */
+}
+
+/* Más espacio entre logo y título */
+.start-screen .guardianes-start{
+  margin-bottom: clamp(18px, 4vw, 32px);
+}
+
+/* Más espacio entre texto y botón */
+.start-screen .game-subtitle{
+  margin-bottom: clamp(20px, 4.5vw, 40px);
+}
+
 
