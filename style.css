@@ -42,6 +42,7 @@ body{
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center; /* ✅ centra verticalmente por defecto */
 }
 
 .hidden{
@@ -57,26 +58,36 @@ h1, h2, label{
    PANTALLA INICIO
 ===================== */
 .start-screen{
-  justify-content: center;
   gap: 18px;
 }
 
-/* TÍTULO Y SUBTÍTULO */
+/* TÍTULO */
 .game-title{
   margin: 0;
   font-family: "Missing Lovely", cursive;
   font-size: clamp(40px, 6vw, 64px);
   font-weight: normal;
   color: #ffffff;
+
+  background: rgba(0,0,0,0.45);
+  padding: 12px 28px;
+  border-radius: 18px;
+
   text-shadow: 0 4px 12px rgba(0,0,0,0.6);
 }
 
+/* SUBTÍTULO */
 .game-subtitle{
-  margin: 0 0 10px;
+  margin: 6px 0 10px;
   font-family: "Missing Lovely", cursive;
   font-size: clamp(20px, 3.5vw, 28px);
   font-weight: normal;
   color: #f0f0f0;
+
+  background: rgba(0,0,0,0.35);
+  padding: 10px 24px;
+  border-radius: 16px;
+
   text-shadow: 0 3px 10px rgba(0,0,0,0.5);
 }
 
@@ -87,20 +98,27 @@ h1, h2, label{
   filter: drop-shadow(0 10px 20px rgba(0,0,0,0.35));
 }
 
-/* BOTONES CON IMAGEN */
+/* =====================
+   BOTONES (CENTRADOS)
+===================== */
+.img-btn,
+.btn{
+  margin: 0 auto;           /* ✅ centrado horizontal */
+  display: block;
+}
+
 .img-btn{
   border: none;
   background: transparent;
   cursor: pointer;
   padding: 0;
-  position: relative;
-  z-index: 5;
 }
 
 .img-btn img{
   width: min(320px, 70vw);
   height: auto;
   display: block;
+  margin: 0 auto;           /* ✅ imagen centrada */
   filter: drop-shadow(0 10px 18px rgba(0,0,0,0.35));
   pointer-events: none;
 }
@@ -109,11 +127,24 @@ h1, h2, label{
   transform: scale(0.98);
 }
 
+/* BOTÓN NORMAL */
+.btn{
+  padding: 12px 18px;
+  border: none;
+  border-radius: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn:active{
+  transform: scale(0.97);
+}
+
 /* =====================
    CONFIGURACIÓN
 ===================== */
 #setup-screen{
-  justify-content: flex-start;
+  justify-content: flex-start; /* mantiene scroll natural */
 }
 
 .guardianes-top{
@@ -155,19 +186,6 @@ h1, h2, label{
   width: 44px;
   height: 44px;
   object-fit: contain;
-}
-
-/* BOTÓN NORMAL */
-.btn{
-  padding: 12px 18px;
-  border: none;
-  border-radius: 14px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.btn:active{
-  transform: scale(0.97);
 }
 
 /* =====================
@@ -327,7 +345,6 @@ h1, h2, label{
 ===================== */
 .end-screen{
   position: relative;
-  justify-content: center;
   gap: 14px;
 }
 
