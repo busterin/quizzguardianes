@@ -21,7 +21,7 @@ h1, h2, label{
 /* CONFIG */
 #teamsConfig{
   margin: 20px auto;
-  max-width: 520px;
+  max-width: 560px;
   display:flex;
   flex-direction:column;
   gap: 12px;
@@ -51,7 +51,7 @@ h1, h2, label{
   object-fit: contain;
 }
 
-/* ───────── FRANJA SUPERIOR ───────── */
+/* FRANJA SUPERIOR (recorrido) */
 #top-bar{
   position: relative;
   margin: 0 auto 10px;
@@ -79,14 +79,14 @@ h1, h2, label{
   border-radius: 12px;
 }
 
-/* RECORRIDO CENTRADO */
+/* RECORRIDO (sin carriles) */
 #teams-track{
   position: relative;
-  width: min(760px, 90vw);
-  height: 70px; /* carril */
+  width: min(820px, 92vw);
+  height: 70px;
 }
 
-/* ✅ LOGOS: todos comparten mismo punto de inicio (left:0) */
+/* LOGOS: sin caja, misma línea (se solapan si coinciden en X) */
 .team-icon{
   position: absolute;
   left: 0;
@@ -101,12 +101,11 @@ h1, h2, label{
   border-radius: 0;
   box-shadow: none;
 
-  /* x avanza por pasos, y centrado vertical */
   transform: translate(var(--x), -50%);
   transition: transform 250ms ease;
 }
 
-/* ✅ META: también anclada al mismo origen (left:0) y colocada en el último paso */
+/* META: al final del recorrido */
 .goal-icon{
   position:absolute;
   left: 0;
@@ -124,8 +123,8 @@ h1, h2, label{
 /* CAJA PREGUNTAS */
 #question-box{
   margin: 30px auto 0;
-  width: min(720px, 92vw);
-  min-height: 260px;
+  width: min(760px, 92vw);
+  min-height: 300px;
 
   background: url("images/cajatexto.jpg") no-repeat center center;
   background-size: cover;
@@ -135,7 +134,7 @@ h1, h2, label{
   justify-content:center;
   align-items:center;
 
-  padding: 40px;
+  padding: 42px 34px;
   border-radius: 18px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.35);
 }
@@ -143,16 +142,46 @@ h1, h2, label{
 #question{
   color:#111;
   font-size:20px;
-  margin-bottom:18px;
+  margin: 0 0 16px 0;
+  max-width: 650px;
 }
 
-.answers{
-  display:flex;
-  gap:10px;
-  flex-wrap: wrap;
-  justify-content:center;
+.options{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  width: min(620px, 90%);
+  margin-top: 6px;
 }
 
+@media (min-width: 720px){
+  .options{
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.option-btn{
+  padding: 12px 14px;
+  border: none;
+  border-radius: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: left;
+}
+
+.option-btn:disabled{
+  cursor: default;
+  opacity: 0.9;
+}
+
+.feedback{
+  min-height: 24px;
+  margin-top: 14px;
+  font-weight: 800;
+  color: #111;
+}
+
+/* Botón genérico */
 .btn{
   padding:12px 18px;
   border:none;
@@ -160,5 +189,4 @@ h1, h2, label{
   font-weight:700;
   cursor:pointer;
 }
-
 .btn:active{ transform: scale(0.97); }
