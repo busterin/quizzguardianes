@@ -8,8 +8,17 @@
 </head>
 <body>
 
+<!-- INICIO -->
+<div id="start-screen" class="screen start-screen">
+  <img src="images/guardianes.png" alt="Guardianes" class="guardianes-start">
+  <button id="enterSetup" class="img-btn" aria-label="Comenzar">
+    <img src="images/boton.png" alt="Comenzar">
+  </button>
+</div>
+
 <!-- CONFIGURACIÓN -->
-<div id="setup-screen" class="screen">
+<div id="setup-screen" class="screen hidden">
+  <img src="images/guardianes.png" alt="Guardianes" class="guardianes-top">
   <h1>Configura el Quiz</h1>
 
   <label>Número de equipos</label>
@@ -32,6 +41,9 @@
     <div id="timer">15:00</div>
   </div>
 
+  <!-- Logo debajo del carril -->
+  <img src="images/guardianes.png" alt="Guardianes" class="guardianes-game">
+
   <h2 id="turnText"></h2>
 
   <div id="question-box">
@@ -45,6 +57,7 @@
 
 <!-- FINAL -->
 <div id="end-screen" class="screen hidden">
+  <img src="images/guardianes.png" alt="Guardianes" class="guardianes-top">
   <h1 id="winnerText"></h1>
   <button class="btn" onclick="location.reload()">Jugar de nuevo</button>
 </div>
