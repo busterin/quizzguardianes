@@ -8,10 +8,11 @@
 </head>
 <body>
 
+<!-- CONFIGURACIÓN -->
 <div id="setup-screen" class="screen">
   <h1>Configura el Quiz</h1>
 
-  <label for="numTeams">Número de equipos:</label>
+  <label>Número de equipos</label>
   <select id="numTeams">
     <option value="1">1</option>
     <option value="2">2</option>
@@ -21,10 +22,13 @@
 
   <div id="teamsConfig"></div>
 
-  <button id="startGame" class="btn">Comenzar</button>
+  <button class="btn" id="startGame">Comenzar</button>
 </div>
 
-<div id="game-screen" class="screen hidden">
+<!-- JUEGO -->
+<div id="game-screen" class="hidden">
+
+  <!-- FRANJA SUPERIOR -->
   <div id="top-bar">
     <div id="teams-track"></div>
     <div id="timer">15:00</div>
@@ -33,9 +37,8 @@
   <h2 id="turnText"></h2>
 
   <div id="question-box">
-    <p id="question">Aquí va la pregunta</p>
+    <p id="question">Aquí irá la pregunta</p>
 
-    <!-- Botones temporales para testear lógica -->
     <div class="answers">
       <button class="btn" onclick="answer(true)">Correcto</button>
       <button class="btn" onclick="answer(false)">Incorrecto</button>
@@ -43,6 +46,7 @@
   </div>
 </div>
 
+<!-- FINAL -->
 <div id="end-screen" class="screen hidden">
   <h1 id="winnerText"></h1>
   <button class="btn" onclick="location.reload()">Jugar de nuevo</button>
