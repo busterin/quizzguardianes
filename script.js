@@ -1,8 +1,8 @@
 const maxSteps = 15;
-const stepPx = 18; // cuánto se desplaza cada "paso" visualmente en el top-bar
+const stepPx = 18; // distancia visual por paso
 let teams = [];
 let currentTeam = 0;
-let timeLeft = 900; // 15 min
+let timeLeft = 900;
 let timerInterval;
 
 const numTeamsSelect = document.getElementById("numTeams");
@@ -28,22 +28,17 @@ function buildTeamInputs() {
 
     row.innerHTML = `
       <input placeholder="Nombre equipo ${i + 1}" id="teamName${i}" />
-
       <select id="teamImg${i}">
         ${logos.map((src, idx) => `<option value="${src}">Logo ${idx + 1}</option>`).join("")}
       </select>
-
       <img id="teamPreview${i}" class="preview" src="${logos[0]}" alt="preview" />
     `;
 
     teamsConfig.appendChild(row);
 
-    // Preview live
     const select = row.querySelector(`#teamImg${i}`);
     const preview = row.querySelector(`#teamPreview${i}`);
-    select.addEventListener("change", () => {
-      preview.src = select.value;
-    });
+    select.addEventListener("change", () => preview.src = select.value);
   }
 }
 
@@ -57,12 +52,7 @@ function startGame() {
     const name = document.getElementById(`teamName${i}`).value.trim() || `Equipo ${i + 1}`;
     const image = document.getElementById(`teamImg${i}`).value;
 
-    teams.push({
-      id: i,
-      name,
-      image,
-      position: 0
-    });
+    teams.push({ id: i, name, image, position: 0 });
   }
 
   document.getElementById("setup-screen").classList.add("hidden");
@@ -80,13 +70,20 @@ function renderTeams() {
   const track = document.getElementById("teams-track");
   track.innerHTML = "";
 
+  // ✅ Meta colocada al final (paso 15)
+  const goal = document.createElement("img");
+  goal.src = "images/meta.png";
+  goal.className = "goal-icon";
+  goal.style.setProperty("--goal-x", `${maxSteps * stepPx}px`);
+  goal.alt = "Meta";
+  track.appendChild(goal);
+
+  // Equipos
   teams.forEach(team => {
     const img = document.createElement("img");
     img.src = team.image;
     img.className = "team-icon";
     img.alt = team.name;
-
-    // desplazamiento en X según pasos
     img.style.setProperty("--x", `${team.position * stepPx}px`);
     track.appendChild(img);
   });
@@ -102,13 +99,11 @@ function answer(correct) {
 
   if (correct) {
     team.position = Math.min(maxSteps, team.position + 1);
-
     if (team.position >= maxSteps) {
       endGame(team.name);
       return;
     }
-
-    // si acierta, sigue jugando (mismo equipo)
+    // si acierta, sigue jugando
   } else {
     team.position = Math.max(0, team.position - 1);
     currentTeam = (currentTeam + 1) % teams.length;
@@ -141,11 +136,8 @@ function updateTimerUI() {
 }
 
 function endByTime() {
-  // gana el que más cerca esté (posición más alta). Si empate: gana el primero en orden.
   let winner = teams[0];
-  for (const t of teams) {
-    if (t.position > winner.position) winner = t;
-  }
+  for (const t of teams) if (t.position > winner.position) winner = t;
   endGame(winner.name, true);
 }
 
@@ -153,7 +145,6 @@ function endGame(name, byTime = false) {
   clearInterval(timerInterval);
   document.getElementById("game-screen").classList.add("hidden");
   document.getElementById("end-screen").classList.remove("hidden");
-
   document.getElementById("winnerText").innerText =
     byTime ? `¡Tiempo! Gana ${name}` : `¡Ha ganado el equipo ${name}!`;
 }
