@@ -11,7 +11,7 @@
 <!-- INICIO -->
 <div id="start-screen" class="screen start-screen">
   <img src="images/guardianes.png" alt="Guardianes" class="guardianes-start">
-  <button id="enterSetup" class="img-btn" aria-label="Comenzar">
+  <button id="enterSetup" type="button" class="img-btn" aria-label="Comenzar">
     <img src="images/boton.png" alt="Comenzar">
   </button>
 </div>
@@ -31,7 +31,7 @@
 
   <div id="teamsConfig"></div>
 
-  <button class="btn" id="startGame">Comenzar</button>
+  <button class="btn" id="startGame" type="button">Comenzar</button>
 </div>
 
 <!-- JUEGO -->
@@ -41,25 +41,29 @@
     <div id="timer">15:00</div>
   </div>
 
-  <!-- Logo debajo del carril -->
   <img src="images/guardianes.png" alt="Guardianes" class="guardianes-game">
 
   <h2 id="turnText"></h2>
 
   <div id="question-box">
     <p id="question">Aquí irá la pregunta</p>
-
     <div id="options" class="options"></div>
-
     <div id="feedback" class="feedback" aria-live="polite"></div>
   </div>
 </div>
 
 <!-- FINAL -->
-<div id="end-screen" class="screen hidden">
+<div id="end-screen" class="screen hidden end-screen">
+  <!-- Confeti -->
+  <canvas id="confetti" aria-hidden="true"></canvas>
+
   <img src="images/guardianes.png" alt="Guardianes" class="guardianes-top">
   <h1 id="winnerText"></h1>
-  <button class="btn" onclick="location.reload()">Jugar de nuevo</button>
+
+  <!-- ✅ Botón imagen -->
+  <button id="restartBtn" type="button" class="img-btn" aria-label="Jugar de nuevo">
+    <img src="images/boton2.png" alt="Jugar de nuevo">
+  </button>
 </div>
 
 <script src="script.js"></script>
