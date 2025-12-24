@@ -1,0 +1,18 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+.hidden {
+  display: none;
+}
+
+#teams-track {
+  display: flex;
+  gap: 10px;
+}
+
+.team-icon {
+  width: 50px;
+  position: relative;
+}
