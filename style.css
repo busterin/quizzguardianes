@@ -412,3 +412,28 @@ h1, h2, label{
   .img-btn img{ max-height: 14dvh; }
   #question-box{ max-height: 54dvh; }
 }
+/* =====================
+   ORDEN INICIO: LOGO ARRIBA
+===================== */
+.start-screen{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.start-screen .guardianes-start{
+  order: 1;
+}
+
+.start-screen .game-title{
+  order: 2;
+}
+
+.start-screen .game-subtitle{
+  order: 3;
+}
+
+.start-screen .img-btn{
+  order: 4;
+}
+
