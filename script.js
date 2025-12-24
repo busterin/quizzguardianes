@@ -1,5 +1,9 @@
 const maxSteps = 15;
-const stepPx = 44; // distancia visual por paso
+const stepPx = 44;         // distancia horizontal por paso
+const laneGap = 26;        // separación vertical entre carriles
+const laneTopPadding = 24; // margen superior dentro del track
+const iconSize = 42;       // tamaño del logo
+const goalSize = 56;       // tamaño meta
 
 let teams = [];
 let currentTeam = 0;
@@ -49,6 +53,7 @@ document.getElementById("startGame").addEventListener("click", ()=>{
 
   for(let i=0;i<num;i++){
     teams.push({
+      id: i,
       name: (document.getElementById(`teamName${i}`).value || `Equipo ${i+1}`).trim(),
       image: document.getElementById(`teamImg${i}`).value,
       position: 0
@@ -66,25 +71,45 @@ document.getElementById("startGame").addEventListener("click", ()=>{
   startTimer();
 });
 
+function computeTrackHeight(numTeams){
+  // carriles: numTeams filas + padding arriba/abajo + espacio para meta
+  const lanesHeight = (numTeams - 1) * laneGap + iconSize;
+  const total = laneTopPadding * 2 + lanesHeight;
+  return Math.max(110, total);
+}
+
 function renderTeams(){
   const track = document.getElementById("teams-track");
   track.innerHTML = "";
 
-  // Meta en el último paso (mismo origen left:0)
+  // Ajustar altura del track según nº equipos
+  track.style.height = `${computeTrackHeight(teams.length)}px`;
+
+  // Meta: centrada en el grupo de carriles (verticalmente)
+  const lanesHeight = (teams.length - 1) * laneGap + iconSize;
+  const lanesTop = laneTopPadding;
+  const lanesCenterY = lanesTop + (lanesHeight / 2) - (goalSize / 2);
+
   const goal = document.createElement("img");
   goal.src = "images/meta.png";
   goal.className = "goal-icon";
-  goal.style.setProperty("--goal-x", `${maxSteps * stepPx}px`);
   goal.alt = "Meta";
+  goal.style.setProperty("--goal-x", `${maxSteps * stepPx}px`);
+  goal.style.setProperty("--goal-y", `${lanesCenterY}px`);
   track.appendChild(goal);
 
-  // Todos los equipos comparten el mismo inicio (x=0) y el mismo final (x=maxSteps*stepPx)
-  teams.forEach((t)=>{
+  // Equipos por carriles: mismo inicio X, distinto Y por carril
+  teams.forEach((t, idx)=>{
+    const y = laneTopPadding + idx * laneGap + (iconSize / 2 - iconSize / 2); // directo (por claridad)
+
     const img = document.createElement("img");
     img.src = t.image;
     img.className = "team-icon";
     img.alt = t.name;
+
     img.style.setProperty("--x", `${t.position * stepPx}px`);
+    img.style.setProperty("--y", `${y}px`);
+
     track.appendChild(img);
   });
 }
@@ -103,7 +128,7 @@ function answer(ok){
       endGame(t.name, false);
       return;
     }
-    // si acierta, sigue jugando
+    // acierta => sigue jugando
   }else{
     t.position = Math.max(0, t.position - 1);
     currentTeam = (currentTeam + 1) % teams.length;
@@ -113,6 +138,7 @@ function answer(ok){
   updateTurn();
 }
 
+/* TIMER */
 function startTimer(){
   clearInterval(timerInterval);
   updateTimerText();
@@ -136,7 +162,6 @@ function updateTimerText(){
 }
 
 function endByTime(){
-  // mayor posición gana; en empate, el primero del array
   let winner = teams[0];
   for(const t of teams){
     if(t.position > winner.position) winner = t;
