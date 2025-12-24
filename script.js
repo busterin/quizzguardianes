@@ -1,5 +1,5 @@
 const maxSteps = 15;
-const stepPx = 28;
+const stepPx = 44; // ahora coincide con el ancho real del recorrido
 
 let teams = [];
 let currentTeam = 0;
@@ -19,7 +19,6 @@ const teamsConfig = document.getElementById("teamsConfig");
 numTeamsSelect.addEventListener("change", buildTeamInputs);
 buildTeamInputs();
 
-/* CONFIG EQUIPOS */
 function buildTeamInputs(){
   teamsConfig.innerHTML = "";
   const num = Number(numTeamsSelect.value);
@@ -44,7 +43,6 @@ function buildTeamInputs(){
   }
 }
 
-/* START */
 document.getElementById("startGame").addEventListener("click", ()=>{
   teams = [];
   const num = Number(numTeamsSelect.value);
@@ -68,7 +66,6 @@ document.getElementById("startGame").addEventListener("click", ()=>{
   startTimer();
 });
 
-/* RENDER */
 function renderTeams(){
   const track = document.getElementById("teams-track");
   track.innerHTML = "";
@@ -93,7 +90,6 @@ function updateTurn(){
     `Turno del equipo ${teams[currentTeam].name}`;
 }
 
-/* RESPUESTA */
 function answer(ok){
   const t = teams[currentTeam];
 
@@ -112,7 +108,6 @@ function answer(ok){
   updateTurn();
 }
 
-/* TIMER */
 function startTimer(){
   clearInterval(timerInterval);
   timerInterval = setInterval(()=>{
