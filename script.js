@@ -46,16 +46,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const logos = ["images/logo1.png","images/logo2.png","images/logo3.png","images/logo4.png"];
 
-  const startScreen = document.getElementById("start-screen");
-  const setupScreen = document.getElementById("setup-screen");
-  const gameScreen  = document.getElementById("game-screen");
-  const endScreen   = document.getElementById("end-screen");
+  const screens = {
+    start: document.getElementById("start-screen"),
+    setup: document.getElementById("setup-screen"),
+    game:  document.getElementById("game-screen"),
+    end:   document.getElementById("end-screen"),
+  };
 
-  const enterSetupBtn = document.getElementById("enterSetup");
-  const restartBtn = document.getElementById("restartBtn");
-
-  const numTeamsSelect = document.getElementById("numTeams");
-  const teamsConfig = document.getElementById("teamsConfig");
+  function showScreen(name){
+    Object.values(screens).forEach(s => s.classList.add("hidden"));
+    screens[name].classList.remove("hidden");
+    window.scrollTo(0,0); // ✅ evita que “quede debajo”
+  }
 
   // ===== Confeti (canvas) =====
   const confettiCanvas = document.getElementById("confetti");
@@ -71,8 +73,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   window.addEventListener("resize", resizeConfetti);
 
-  function startConfetti(durationMs = 5500){
-    stopConfetti(); // por si acaso
+  function startConfetti(durationMs = 6000){
+    stopConfetti();
     resizeConfetti();
 
     const w = window.innerWidth;
@@ -86,7 +88,6 @@ document.addEventListener("DOMContentLoaded", () => {
       r: 3 + Math.random() * 5,
       rot: Math.random() * Math.PI,
       vrot: (-0.1 + Math.random() * 0.2),
-      // color aleatorio
       c: `hsl(${Math.floor(Math.random() * 360)}, 90%, 60%)`,
       a: 0.9
     }));
@@ -98,8 +99,6 @@ document.addEventListener("DOMContentLoaded", () => {
         p.x += p.vx;
         p.y += p.vy;
         p.rot += p.vrot;
-
-        // ligera “brisa”
         p.vx += (-0.02 + Math.random() * 0.04);
 
         ctx.save();
@@ -110,7 +109,6 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.fillRect(-p.r, -p.r/2, p.r*2, p.r);
         ctx.restore();
 
-        // reciclar si cae fuera
         if (p.y > h + 40) {
           p.y = -20;
           p.x = Math.random() * w;
@@ -122,10 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     confettiRAF = requestAnimationFrame(tick);
-
-    confettiStopTimeout = setTimeout(() => {
-      stopConfetti();
-    }, durationMs);
+    confettiStopTimeout = setTimeout(stopConfetti, durationMs);
   }
 
   function stopConfetti(){
@@ -137,14 +132,12 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.clearRect(0,0,window.innerWidth, window.innerHeight);
   }
 
-  // ===== Pantallas =====
-  enterSetupBtn.addEventListener("click", () => {
-    startScreen.classList.add("hidden");
-    setupScreen.classList.remove("hidden");
-  });
+  // ===== Botones =====
+  document.getElementById("enterSetup").addEventListener("click", () => showScreen("setup"));
+  document.getElementById("restartBtn").addEventListener("click", () => location.reload());
 
-  restartBtn.addEventListener("click", () => location.reload());
-
+  const numTeamsSelect = document.getElementById("numTeams");
+  const teamsConfig = document.getElementById("teamsConfig");
   numTeamsSelect.addEventListener("change", buildTeamInputs);
   buildTeamInputs();
 
@@ -165,7 +158,6 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
 
       teamsConfig.appendChild(row);
-
       row.querySelector(`#teamImg${i}`).addEventListener("change", e=>{
         row.querySelector(`#preview${i}`).src = e.target.value;
       });
@@ -186,8 +178,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     resetQuestionBag();
 
-    setupScreen.classList.add("hidden");
-    gameScreen.classList.remove("hidden");
+    showScreen("game");
 
     currentTeam = 0;
     timeLeft = 900;
@@ -198,11 +189,11 @@ document.addEventListener("DOMContentLoaded", () => {
     showNextQuestion();
   });
 
+  // ===== Preguntas =====
   function resetQuestionBag(){
     questionBag = QUESTIONS.map((_, idx) => idx);
     shuffle(questionBag);
   }
-
   function getNextQuestion(){
     if (questionBag.length === 0) resetQuestionBag();
     return QUESTIONS[questionBag.pop()];
@@ -259,10 +250,11 @@ document.addEventListener("DOMContentLoaded", () => {
     resolveAnswer(ok);
 
     setTimeout(() => {
-      if (!gameScreen.classList.contains("hidden")) showNextQuestion();
+      if (!screens.game.classList.contains("hidden")) showNextQuestion();
     }, 1000);
   }
 
+  // ===== Recorrido =====
   function renderTeams(){
     const track = document.getElementById("teams-track");
     track.innerHTML = "";
@@ -307,6 +299,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateTurn();
   }
 
+  // ===== Timer =====
   function startTimer(){
     clearInterval(timerInterval);
     updateTimerText();
@@ -338,14 +331,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function endGame(name, byTime){
     clearInterval(timerInterval);
-
-    gameScreen.classList.add("hidden");
-    endScreen.classList.remove("hidden");
+    showScreen("end");
 
     document.getElementById("winnerText").innerText =
       byTime ? `¡Tiempo! Gana ${name}` : `¡Ha ganado ${name}!`;
 
-    // ✅ Confeti al ganar
     startConfetti(6000);
   }
 
@@ -355,4 +345,7 @@ document.addEventListener("DOMContentLoaded", () => {
       [arr[i], arr[j]] = [arr[j], arr[i]];
     }
   }
+
+  // Inicial
+  showScreen("start");
 });
