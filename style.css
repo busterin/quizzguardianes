@@ -1,3 +1,16 @@
+/* =====================
+   FUENTE PERSONALIZADA
+===================== */
+@font-face{
+  font-family: "Missing Lovely";
+  src: url("fonts/MissingLovely.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* =====================
+   RESET / BASE
+===================== */
 *{
   box-sizing: border-box;
 }
@@ -51,16 +64,18 @@ h1, h2, label{
 /* TÍTULO Y SUBTÍTULO */
 .game-title{
   margin: 0;
-  font-size: clamp(32px, 5vw, 54px);
-  font-weight: 900;
+  font-family: "Missing Lovely", cursive;
+  font-size: clamp(40px, 6vw, 64px);
+  font-weight: normal;
   color: #ffffff;
   text-shadow: 0 4px 12px rgba(0,0,0,0.6);
 }
 
 .game-subtitle{
   margin: 0 0 10px;
-  font-size: clamp(16px, 3vw, 22px);
-  font-weight: 500;
+  font-family: "Missing Lovely", cursive;
+  font-size: clamp(20px, 3.5vw, 28px);
+  font-weight: normal;
   color: #f0f0f0;
   text-shadow: 0 3px 10px rgba(0,0,0,0.5);
 }
