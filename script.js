@@ -1,11 +1,19 @@
 const maxSteps = 15;
+const stepPx = 18; // cuánto se desplaza cada "paso" visualmente en el top-bar
 let teams = [];
 let currentTeam = 0;
-let timeLeft = 900;
+let timeLeft = 900; // 15 min
 let timerInterval;
 
 const numTeamsSelect = document.getElementById("numTeams");
 const teamsConfig = document.getElementById("teamsConfig");
+
+const logos = [
+  "images/logo1.png",
+  "images/logo2.png",
+  "images/logo3.png",
+  "images/logo4.png"
+];
 
 numTeamsSelect.addEventListener("change", buildTeamInputs);
 buildTeamInputs();
@@ -15,12 +23,27 @@ function buildTeamInputs() {
   const num = Number(numTeamsSelect.value);
 
   for (let i = 0; i < num; i++) {
-    teamsConfig.innerHTML += `
-      <div>
-        <input placeholder="Nombre equipo ${i + 1}" id="teamName${i}">
-        <input placeholder="URL imagen" id="teamImg${i}">
-      </div>
+    const row = document.createElement("div");
+    row.className = "team-row";
+
+    row.innerHTML = `
+      <input placeholder="Nombre equipo ${i + 1}" id="teamName${i}" />
+
+      <select id="teamImg${i}">
+        ${logos.map((src, idx) => `<option value="${src}">Logo ${idx + 1}</option>`).join("")}
+      </select>
+
+      <img id="teamPreview${i}" class="preview" src="${logos[0]}" alt="preview" />
     `;
+
+    teamsConfig.appendChild(row);
+
+    // Preview live
+    const select = row.querySelector(`#teamImg${i}`);
+    const preview = row.querySelector(`#teamPreview${i}`);
+    select.addEventListener("change", () => {
+      preview.src = select.value;
+    });
   }
 }
 
@@ -31,15 +54,22 @@ function startGame() {
   teams = [];
 
   for (let i = 0; i < num; i++) {
+    const name = document.getElementById(`teamName${i}`).value.trim() || `Equipo ${i + 1}`;
+    const image = document.getElementById(`teamImg${i}`).value;
+
     teams.push({
-      name: document.getElementById(`teamName${i}`).value || `Equipo ${i + 1}`,
-      image: document.getElementById(`teamImg${i}`).value,
+      id: i,
+      name,
+      image,
       position: 0
     });
   }
 
   document.getElementById("setup-screen").classList.add("hidden");
   document.getElementById("game-screen").classList.remove("hidden");
+
+  currentTeam = 0;
+  timeLeft = 900;
 
   renderTeams();
   updateTurnText();
@@ -54,7 +84,10 @@ function renderTeams() {
     const img = document.createElement("img");
     img.src = team.image;
     img.className = "team-icon";
-    img.style.left = `${team.position * 20}px`;
+    img.alt = team.name;
+
+    // desplazamiento en X según pasos
+    img.style.setProperty("--x", `${team.position * stepPx}px`);
     track.appendChild(img);
   });
 }
@@ -68,11 +101,14 @@ function answer(correct) {
   const team = teams[currentTeam];
 
   if (correct) {
-    team.position++;
+    team.position = Math.min(maxSteps, team.position + 1);
+
     if (team.position >= maxSteps) {
       endGame(team.name);
       return;
     }
+
+    // si acierta, sigue jugando (mismo equipo)
   } else {
     team.position = Math.max(0, team.position - 1);
     currentTeam = (currentTeam + 1) % teams.length;
@@ -83,12 +119,12 @@ function answer(correct) {
 }
 
 function startTimer() {
+  clearInterval(timerInterval);
+  updateTimerUI();
+
   timerInterval = setInterval(() => {
     timeLeft--;
-    const min = Math.floor(timeLeft / 60);
-    const sec = timeLeft % 60;
-    document.getElementById("timer").innerText =
-      `${min}:${sec.toString().padStart(2, "0")}`;
+    updateTimerUI();
 
     if (timeLeft <= 0) {
       clearInterval(timerInterval);
@@ -97,15 +133,27 @@ function startTimer() {
   }, 1000);
 }
 
-function endByTime() {
-  const winner = teams.reduce((a, b) => a.position > b.position ? a : b);
-  endGame(winner.name);
+function updateTimerUI() {
+  const min = Math.floor(timeLeft / 60);
+  const sec = timeLeft % 60;
+  document.getElementById("timer").innerText =
+    `${min}:${sec.toString().padStart(2, "0")}`;
 }
 
-function endGame(name) {
+function endByTime() {
+  // gana el que más cerca esté (posición más alta). Si empate: gana el primero en orden.
+  let winner = teams[0];
+  for (const t of teams) {
+    if (t.position > winner.position) winner = t;
+  }
+  endGame(winner.name, true);
+}
+
+function endGame(name, byTime = false) {
   clearInterval(timerInterval);
   document.getElementById("game-screen").classList.add("hidden");
   document.getElementById("end-screen").classList.remove("hidden");
+
   document.getElementById("winnerText").innerText =
-    `¡Ha ganado el equipo ${name}!`;
+    byTime ? `¡Tiempo! Gana ${name}` : `¡Ha ganado el equipo ${name}!`;
 }
