@@ -1,5 +1,5 @@
 const maxSteps = 15;
-const stepPx = 44; // ahora coincide con el ancho real del recorrido
+const stepPx = 44; // distancia visual por paso
 
 let teams = [];
 let currentTeam = 0;
@@ -49,7 +49,7 @@ document.getElementById("startGame").addEventListener("click", ()=>{
 
   for(let i=0;i<num;i++){
     teams.push({
-      name: document.getElementById(`teamName${i}`).value || `Equipo ${i+1}`,
+      name: (document.getElementById(`teamName${i}`).value || `Equipo ${i+1}`).trim(),
       image: document.getElementById(`teamImg${i}`).value,
       position: 0
     });
@@ -70,16 +70,20 @@ function renderTeams(){
   const track = document.getElementById("teams-track");
   track.innerHTML = "";
 
+  // Meta en el último paso (mismo origen left:0)
   const goal = document.createElement("img");
   goal.src = "images/meta.png";
   goal.className = "goal-icon";
   goal.style.setProperty("--goal-x", `${maxSteps * stepPx}px`);
+  goal.alt = "Meta";
   track.appendChild(goal);
 
-  teams.forEach(t=>{
+  // Todos los equipos comparten el mismo inicio (x=0) y el mismo final (x=maxSteps*stepPx)
+  teams.forEach((t)=>{
     const img = document.createElement("img");
     img.src = t.image;
     img.className = "team-icon";
+    img.alt = t.name;
     img.style.setProperty("--x", `${t.position * stepPx}px`);
     track.appendChild(img);
   });
@@ -94,11 +98,12 @@ function answer(ok){
   const t = teams[currentTeam];
 
   if(ok){
-    t.position++;
+    t.position = Math.min(maxSteps, t.position + 1);
     if(t.position >= maxSteps){
-      endGame(t.name);
+      endGame(t.name, false);
       return;
     }
+    // si acierta, sigue jugando
   }else{
     t.position = Math.max(0, t.position - 1);
     currentTeam = (currentTeam + 1) % teams.length;
@@ -110,12 +115,11 @@ function answer(ok){
 
 function startTimer(){
   clearInterval(timerInterval);
+  updateTimerText();
+
   timerInterval = setInterval(()=>{
     timeLeft--;
-    const m = Math.floor(timeLeft / 60);
-    const s = timeLeft % 60;
-    document.getElementById("timer").innerText =
-      `${m}:${s.toString().padStart(2,"0")}`;
+    updateTimerText();
 
     if(timeLeft <= 0){
       clearInterval(timerInterval);
@@ -124,15 +128,26 @@ function startTimer(){
   },1000);
 }
 
-function endByTime(){
-  let winner = teams.reduce((a,b)=> b.position>a.position?b:a);
-  endGame(winner.name);
+function updateTimerText(){
+  const m = Math.floor(timeLeft / 60);
+  const s = timeLeft % 60;
+  document.getElementById("timer").innerText =
+    `${m}:${s.toString().padStart(2,"0")}`;
 }
 
-function endGame(name){
+function endByTime(){
+  // mayor posición gana; en empate, el primero del array
+  let winner = teams[0];
+  for(const t of teams){
+    if(t.position > winner.position) winner = t;
+  }
+  endGame(winner.name, true);
+}
+
+function endGame(name, byTime){
   clearInterval(timerInterval);
   document.getElementById("game-screen").classList.add("hidden");
   document.getElementById("end-screen").classList.remove("hidden");
   document.getElementById("winnerText").innerText =
-    `¡Ha ganado ${name}!`;
+    byTime ? `¡Tiempo! Gana ${name}` : `¡Ha ganado ${name}!`;
 }
