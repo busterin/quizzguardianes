@@ -40,12 +40,11 @@ const QUESTIONS = [
   { q: "¿Qué es una subvención?", o: ["Dinero que se paga en una tienda","Dinero que se regala por sorteo","Ayuda económica que da el gobierno","Un impuesto"], a: 2 },
 ];
 
-// “mazo” de preguntas barajado que se va consumiendo
+// mazo barajado
 let questionBag = [];
 let currentQuestion = null;
 let answeringLocked = false;
 
-// ===== LOGOS =====
 const logos = [
   "images/logo1.png",
   "images/logo2.png",
@@ -59,6 +58,13 @@ const teamsConfig = document.getElementById("teamsConfig");
 numTeamsSelect.addEventListener("change", buildTeamInputs);
 buildTeamInputs();
 
+// ===== Pantallas =====
+document.getElementById("enterSetup").addEventListener("click", () => {
+  document.getElementById("start-screen").classList.add("hidden");
+  document.getElementById("setup-screen").classList.remove("hidden");
+});
+
+// ===== Config equipos =====
 function buildTeamInputs(){
   teamsConfig.innerHTML = "";
   const num = Number(numTeamsSelect.value);
@@ -83,6 +89,7 @@ function buildTeamInputs(){
   }
 }
 
+// ===== Start juego =====
 document.getElementById("startGame").addEventListener("click", ()=>{
   teams = [];
   const num = Number(numTeamsSelect.value);
@@ -95,7 +102,6 @@ document.getElementById("startGame").addEventListener("click", ()=>{
     });
   }
 
-  // Preparar preguntas
   resetQuestionBag();
 
   document.getElementById("setup-screen").classList.add("hidden");
@@ -118,9 +124,7 @@ function resetQuestionBag(){
 }
 
 function getNextQuestion(){
-  if (questionBag.length === 0) {
-    resetQuestionBag(); // cuando se acaban, vuelven a empezar (nuevo aleatorio)
-  }
+  if (questionBag.length === 0) resetQuestionBag();
   const idx = questionBag.pop();
   return QUESTIONS[idx];
 }
@@ -141,6 +145,7 @@ function showNextQuestion(){
     const btn = document.createElement("button");
     btn.className = "option-btn";
     btn.type = "button";
+    btn.dataset.idx = String(optIdx);
     btn.textContent = `${letters[optIdx]}) ${optText}`;
     btn.addEventListener("click", () => chooseOption(optIdx));
     optionsWrap.appendChild(btn);
@@ -152,26 +157,40 @@ function chooseOption(selectedIdx){
   answeringLocked = true;
 
   const correctIdx = currentQuestion.a;
+  const letters = ["A", "B", "C", "D"];
   const optionsButtons = Array.from(document.querySelectorAll(".option-btn"));
 
-  // desactivar
   optionsButtons.forEach(b => b.disabled = true);
+
+  const correctBtn = optionsButtons.find(b => Number(b.dataset.idx) === correctIdx);
+  if (correctBtn) correctBtn.classList.add("correct");
+
+  if (selectedIdx !== correctIdx) {
+    const selectedBtn = optionsButtons.find(b => Number(b.dataset.idx) === selectedIdx);
+    if (selectedBtn) selectedBtn.classList.add("wrong");
+  }
 
   const ok = selectedIdx === correctIdx;
 
-  // feedback visual rápido (sin colores forzados; solo texto)
-  document.getElementById("feedback").textContent = ok ? "✅ ¡Correcto!" : "❌ Incorrecto";
+  if (ok) {
+    document.getElementById("feedback").textContent = "✅ ¡Correcto!";
+  } else {
+    const correctText = currentQuestion.o[correctIdx];
+    document.getElementById("feedback").textContent =
+      `❌ Incorrecto. La correcta era ${letters[correctIdx]}) ${correctText}`;
+  }
 
-  // resolver turno/movimiento
   resolveAnswer(ok);
 
-  // siguiente pregunta tras un pequeño delay
   setTimeout(() => {
-    showNextQuestion();
-  }, 650);
+    // si ya terminó el juego, no seguimos
+    if (!document.getElementById("game-screen").classList.contains("hidden")) {
+      showNextQuestion();
+    }
+  }, 1000);
 }
 
-// ===== Juego/turnos =====
+// ===== Recorrido =====
 function renderTeams(){
   const track = document.getElementById("teams-track");
   track.innerHTML = "";
@@ -207,7 +226,6 @@ function resolveAnswer(ok){
       endGame(t.name, false);
       return;
     }
-    // si acierta, sigue jugando (mismo equipo)
   }else{
     t.position = Math.max(0, t.position - 1);
     currentTeam = (currentTeam + 1) % teams.length;
@@ -250,8 +268,10 @@ function endByTime(){
 
 function endGame(name, byTime){
   clearInterval(timerInterval);
+
   document.getElementById("game-screen").classList.add("hidden");
   document.getElementById("end-screen").classList.remove("hidden");
+
   document.getElementById("winnerText").innerText =
     byTime ? `¡Tiempo! Gana ${name}` : `¡Ha ganado ${name}!`;
 }
