@@ -25,7 +25,6 @@ body{
   background: url("images/fondo.jpg") no-repeat center center fixed;
   background-size: cover;
 
-  /* En móvil 100vh puede fallar; el “scroll” lo evitamos ajustando tamaños */
   overflow: hidden;
 }
 
@@ -33,7 +32,7 @@ body{
    PANTALLAS GENERALES
 ===================== */
 .screen{
-  height: 100dvh;                 /* ✅ mejor en móvil */
+  height: 100dvh;
   width: 100vw;
   padding: clamp(10px, 2.5vw, 20px);
 
@@ -43,7 +42,6 @@ body{
   justify-content: center;
   gap: clamp(10px, 2.2vw, 18px);
 
-  /* evita que elementos empujen fuera */
   min-height: 0;
 }
 
@@ -72,7 +70,7 @@ h1, h2, label{
 
 .img-btn img{
   width: min(320px, 70vw);
-  max-height: 16dvh;              /* ✅ para que nunca “rompa” en móvil */
+  max-height: 16dvh;
   height: auto;
   display: block;
   margin: 0 auto;
@@ -128,17 +126,16 @@ h1, h2, label{
   text-shadow: 0 3px 10px rgba(0,0,0,0.5);
 }
 
-/* LOGO GUARDIANES (inicio) */
+/* LOGO GUARDIANES (solo inicio siempre visible) */
 .guardianes-start{
   width: min(520px, 78vw);
-  max-height: 34dvh;              /* ✅ clave: que quepa en móvil */
+  max-height: 34dvh;
   height: auto;
   filter: drop-shadow(0 10px 20px rgba(0,0,0,0.35));
 }
 
 /* =====================
    CONFIGURACIÓN
-   (sin scroll: ajustamos tamaños; si hay 4 equipos, sigue cabiendo mejor)
 ===================== */
 #setup-screen{
   justify-content: flex-start;
@@ -259,23 +256,14 @@ h1, h2, label{
   filter: drop-shadow(0 6px 10px rgba(0,0,0,0.45));
 }
 
-.guardianes-game{
-  width: min(300px, 58vw);
-  max-height: 14dvh;
-  height: auto;
-  margin: 4px auto 0;
-  filter: drop-shadow(0 8px 18px rgba(0,0,0,0.35));
-}
-
 /* =====================
    PREGUNTAS
-   ✅ caja flexible para no “empujar” fuera en móvil
 ===================== */
 #question-box{
   width: min(760px, 92vw);
-  flex: 1;                        /* ✅ ocupa el espacio restante */
-  min-height: 0;                  /* ✅ permite encoger */
-  max-height: 58dvh;              /* ✅ nunca se sale */
+  flex: 1;
+  min-height: 0;
+  max-height: 58dvh;
   margin: 8px auto 0;
 
   background: url("images/cajatexto.jpg") no-repeat center center;
@@ -321,7 +309,6 @@ h1, h2, label{
 }
 
 .option-btn:disabled{ cursor: default; opacity: 0.98; }
-
 .option-btn.correct{ background: rgba(56,178,72,0.9); color:#fff; }
 .option-btn.wrong{ background: rgba(220,38,38,0.9); color:#fff; }
 
@@ -357,8 +344,16 @@ h1, h2, label{
 }
 
 /* =====================
-   AJUSTE EXTRA PARA MÓVILES MUY PEQUEÑOS
+   🔥 OCULTAR LOGOS EN MÓVIL (EXCEPTO INICIO)
 ===================== */
+@media (max-width: 768px){
+  .guardianes-top,
+  .guardianes-game{
+    display: none !important;
+  }
+}
+
+/* Ajuste extra móviles pequeños */
 @media (max-height: 680px){
   .guardianes-start{ max-height: 30dvh; }
   .img-btn img{ max-height: 14dvh; }
