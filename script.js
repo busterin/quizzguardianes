@@ -46,6 +46,43 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const logos = ["images/logo1.png","images/logo2.png","images/logo3.png","images/logo4.png"];
 
+  // =========================================================
+  // ✅ MODO EMBED (GENIALLY): escalar a 16:9 sin recortes
+  // Requiere en HTML: #embed-wrap y #embed-app (como te pasé)
+  // =========================================================
+  const inIframe = (() => {
+    try { return window.self !== window.top; } catch { return true; }
+  })();
+
+  if (inIframe) document.body.classList.add("in-iframe");
+
+  const DESIGN_W = 1280;
+  const DESIGN_H = 720;
+
+  const embedWrap = document.getElementById("embed-wrap");
+  const embedApp  = document.getElementById("embed-app");
+
+  function applyEmbedScale(){
+    if (!inIframe) return;
+    if (!embedWrap || !embedApp) return;
+
+    // tamaño real visible del iframe en Genially
+    const w = embedWrap.clientWidth;
+    const h = embedWrap.clientHeight;
+
+    const scale = Math.min(w / DESIGN_W, h / DESIGN_H);
+
+    embedApp.style.width = DESIGN_W + "px";
+    embedApp.style.height = DESIGN_H + "px";
+    embedApp.style.transformOrigin = "top left";
+    embedApp.style.transform = `scale(${scale})`;
+  }
+
+  window.addEventListener("resize", () => {
+    applyEmbedScale();
+    resizeConfetti(); // para que el canvas se ajuste
+  });
+
   const screens = {
     start: document.getElementById("start-screen"),
     setup: document.getElementById("setup-screen"),
@@ -56,7 +93,8 @@ document.addEventListener("DOMContentLoaded", () => {
   function showScreen(name){
     Object.values(screens).forEach(s => s.classList.add("hidden"));
     screens[name].classList.remove("hidden");
-    window.scrollTo(0,0); // ✅ evita que “quede debajo”
+    window.scrollTo(0,0);
+    applyEmbedScale(); // ✅ clave: recalcular tras cambiar de pantalla
   }
 
   // ===== Confeti (canvas) =====
@@ -67,11 +105,14 @@ document.addEventListener("DOMContentLoaded", () => {
   let confettiStopTimeout = null;
 
   function resizeConfetti(){
-    confettiCanvas.width = window.innerWidth * devicePixelRatio;
-    confettiCanvas.height = window.innerHeight * devicePixelRatio;
+    // si está dentro de iframe, usamos el tamaño visible del viewport actual
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+
+    confettiCanvas.width = vw * devicePixelRatio;
+    confettiCanvas.height = vh * devicePixelRatio;
     ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
   }
-  window.addEventListener("resize", resizeConfetti);
 
   function startConfetti(durationMs = 6000){
     stopConfetti();
@@ -194,6 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
     questionBag = QUESTIONS.map((_, idx) => idx);
     shuffle(questionBag);
   }
+
   function getNextQuestion(){
     if (questionBag.length === 0) resetQuestionBag();
     return QUESTIONS[questionBag.pop()];
@@ -348,4 +390,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Inicial
   showScreen("start");
+  applyEmbedScale(); // ✅ por si Genially tarda en dar tamaño al iframe
 });
