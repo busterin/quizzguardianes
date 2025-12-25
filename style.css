@@ -40,6 +40,8 @@ body{
   align-items: center;
   justify-content: center;
   gap: 18px;
+
+  min-height: 0;
 }
 
 .hidden{ display:none !important; }
@@ -85,26 +87,52 @@ h1, h2, label{
 .btn:active{ transform: scale(0.97); }
 
 /* =====================
-   PANTALLA INICIO (DESKTOP)
+   PANTALLA INICIO
+   - Logo arriba del texto
+   - Más espacio entre logo/texto y texto/botón
+   - Fondos OPACOS para título y subtítulo
 ===================== */
-.start-screen{ gap: 18px; }
+.start-screen{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-/* TÍTULO */
+  gap: clamp(20px, 4vw, 36px);
+}
+
+/* Orden (HTML no cambia) */
+.start-screen .guardianes-start{ order: 1; }
+.start-screen .game-title{ order: 2; }
+.start-screen .game-subtitle{ order: 3; }
+.start-screen .img-btn{ order: 4; }
+
+/* Logo inicio */
+.guardianes-start{
+  width: min(520px, 80vw);
+  height: auto;
+  max-height: none;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.35));
+
+  margin-bottom: clamp(18px, 4vw, 32px); /* + espacio logo -> texto */
+}
+
+/* TÍTULO (fondo opaco) */
 .game-title{
   margin: 0;
   font-family: "Missing Lovely", cursive;
   font-size: clamp(40px, 6vw, 64px);
   font-weight: normal;
-  color: #fff;
+  color: #ffffff;
 
-  background: rgba(0,0,0,0.45);
+  background: #000000; /* ✅ opaco */
   padding: 12px 28px;
   border-radius: 18px;
 
   text-shadow: 0 4px 12px rgba(0,0,0,0.6);
 }
 
-/* SUBTÍTULO */
+/* SUBTÍTULO (fondo opaco) */
 .game-subtitle{
   margin: 0;
   font-family: "Missing Lovely", cursive;
@@ -112,36 +140,26 @@ h1, h2, label{
   font-weight: normal;
   color: #f0f0f0;
 
-  background: rgba(0,0,0,0.35);
+  background: #000000; /* ✅ opaco */
   padding: 10px 24px;
   border-radius: 16px;
 
   text-shadow: 0 3px 10px rgba(0,0,0,0.5);
-}
 
-/* LOGO INICIO (DESKTOP: sin dvh, sin estirar) */
-.guardianes-start{
-  width: min(520px, 80vw);
-  height: auto;
-  max-height: none;
-  object-fit: contain;
-  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.35));
+  margin-bottom: clamp(20px, 4.5vw, 40px); /* + espacio texto -> botón */
 }
 
 /* =====================
    CONFIGURACIÓN
+   - Quitar logo en pantalla setup
 ===================== */
 #setup-screen{
   justify-content: flex-start;
 }
 
-.guardianes-top{
-  width: min(360px, 70vw);
-  height: auto;
-  max-height: none;
-  object-fit: contain;
-  margin: 8px auto 10px;
-  filter: drop-shadow(0 8px 18px rgba(0,0,0,0.35));
+/* ✅ oculta el logo SOLO en configuración */
+#setup-screen .guardianes-top{
+  display: none !important;
 }
 
 #teamsConfig{
@@ -274,7 +292,7 @@ h1, h2, label{
 
   padding: 42px 34px;
   border-radius: 18px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.35));
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
 }
 
 #question{
@@ -340,10 +358,9 @@ h1, h2, label{
 }
 
 /* =====================
-   ✅ MÓVIL (sin scroll, logos ocultos excepto inicio)
+   MÓVIL (sin scroll + ocultar logos excepto inicio)
 ===================== */
 @media (max-width: 768px){
-  /* mejor viewport en móvil */
   .screen{
     height: 100dvh;
     min-height: 100dvh;
@@ -351,25 +368,24 @@ h1, h2, label{
     gap: clamp(10px, 2.2vw, 16px);
   }
 
-  /* ocultar logos fuera del inicio */
+  /* oculta logos en móvil fuera del inicio */
   .guardianes-top,
   .guardianes-game{
     display: none !important;
   }
 
-  /* inicio: limitar alturas para que quepa */
   .guardianes-start{
     width: min(520px, 78vw);
     max-height: 34dvh;
+    margin-bottom: clamp(14px, 3.5vw, 26px);
   }
 
   .img-btn img{
     max-height: 16dvh;
-    width: min(320px, 70vw);
   }
 
-  /* juego: caja flexible */
   #game-screen{ justify-content: flex-start; }
+
   #question-box{
     flex: 1;
     min-height: 0;
@@ -412,45 +428,3 @@ h1, h2, label{
   .img-btn img{ max-height: 14dvh; }
   #question-box{ max-height: 54dvh; }
 }
-/* =====================
-   ORDEN INICIO: LOGO ARRIBA
-===================== */
-.start-screen{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.start-screen .guardianes-start{
-  order: 1;
-}
-
-.start-screen .game-title{
-  order: 2;
-}
-
-.start-screen .game-subtitle{
-  order: 3;
-}
-
-.start-screen .img-btn{
-  order: 4;
-}
-/* =====================
-   ESPACIADO EXTRA – PANTALLA INICIO
-===================== */
-.start-screen{
-  gap: clamp(20px, 4vw, 36px); /* espacio general mayor */
-}
-
-/* Más espacio entre logo y título */
-.start-screen .guardianes-start{
-  margin-bottom: clamp(18px, 4vw, 32px);
-}
-
-/* Más espacio entre texto y botón */
-.start-screen .game-subtitle{
-  margin-bottom: clamp(20px, 4.5vw, 40px);
-}
-
-
