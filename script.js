@@ -350,3 +350,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // Inicial
   showScreen("start");
 });
+/* =====================
+   FINAL: limitar logo para que no tape el layout
+===================== */
+#end-screen .guardianes-top{
+  width: min(320px, 70vw);
+  max-height: 18vh;
+  height: auto;
+  object-fit: contain;
+  margin: 0 auto 12px;
+}
+
