@@ -350,3 +350,24 @@ h1, h2, label{
     padding: 24px 18px;
   }
 }
+/* =====================
+   AJUSTES FINOS
+===================== */
+
+/* 1) INICIO: subir todo manteniendo distancias */
+#start-screen{
+  transform: translateY(-6vh);
+}
+
+/* En móviles muy pequeños, subir un pelín más */
+@media (max-width: 768px){
+  #start-screen{
+    transform: translateY(-7vh);
+  }
+}
+
+/* 2) JUEGO: feedback más separado de las opciones */
+#feedback{
+  margin-top: 18px;  /* antes estaba muy pegado */
+}
+
