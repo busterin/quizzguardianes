@@ -28,7 +28,7 @@ body{
 }
 
 /* =====================
-   PANTALLAS GENERALES (DESKTOP BASE)
+   PANTALLAS GENERALES
 ===================== */
 .screen{
   min-height: 100vh;
@@ -39,9 +39,8 @@ body{
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 18px;
 
-  min-height: 0;
+  gap: 18px;
 }
 
 .hidden{ display:none !important; }
@@ -52,7 +51,7 @@ h1, h2, label{
 }
 
 /* =====================
-   BOTONES (CENTRADOS)
+   BOTONES
 ===================== */
 .img-btn, .btn{
   margin: 0 auto;
@@ -67,7 +66,7 @@ h1, h2, label{
 }
 
 .img-btn img{
-  width: min(320px, 70vw);
+  width: min(300px, 70vw);
   height: auto;
   display: block;
   margin: 0 auto;
@@ -88,19 +87,15 @@ h1, h2, label{
 
 /* =====================
    PANTALLA INICIO
-   - Logo arriba del texto
-   - Más espacio entre logo/texto y texto/botón
-   - Fondos OPACOS para título y subtítulo
 ===================== */
 .start-screen{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  gap: clamp(20px, 4vw, 36px);
+  /* 🔑 sube todo el bloque */
+  justify-content: center;
+  padding-top: clamp(20px, 6vh, 80px);
+  gap: clamp(18px, 4vh, 32px);
 }
 
-/* Orden (HTML no cambia) */
+/* Orden */
 .start-screen .guardianes-start{ order: 1; }
 .start-screen .game-title{ order: 2; }
 .start-screen .game-subtitle{ order: 3; }
@@ -108,56 +103,49 @@ h1, h2, label{
 
 /* Logo inicio */
 .guardianes-start{
-  width: min(520px, 80vw);
+  width: min(460px, 75vw);
   height: auto;
-  max-height: none;
   object-fit: contain;
   filter: drop-shadow(0 10px 20px rgba(0,0,0,0.35));
-
-  margin-bottom: clamp(18px, 4vw, 32px); /* + espacio logo -> texto */
 }
 
-/* TÍTULO (fondo opaco) */
+/* TÍTULO */
 .game-title{
   margin: 0;
   font-family: "Missing Lovely", cursive;
-  font-size: clamp(40px, 6vw, 64px);
+  font-size: clamp(36px, 5.5vw, 60px);
   font-weight: normal;
-  color: #ffffff;
+  color: #fff;
 
-  background: #000000; /* ✅ opaco */
+  background: #000;
   padding: 12px 28px;
   border-radius: 18px;
-
-  text-shadow: 0 4px 12px rgba(0,0,0,0.6);
 }
 
-/* SUBTÍTULO (fondo opaco) */
+/* SUBTÍTULO */
 .game-subtitle{
   margin: 0;
   font-family: "Missing Lovely", cursive;
-  font-size: clamp(20px, 3.5vw, 28px);
+  font-size: clamp(18px, 3.5vw, 26px);
   font-weight: normal;
   color: #f0f0f0;
 
-  background: #000000; /* ✅ opaco */
+  background: #000;
   padding: 10px 24px;
   border-radius: 16px;
 
-  text-shadow: 0 3px 10px rgba(0,0,0,0.5);
-
-  margin-bottom: clamp(20px, 4.5vw, 40px); /* + espacio texto -> botón */
+  /* separa texto del botón */
+  margin-bottom: clamp(14px, 3vh, 28px);
 }
 
 /* =====================
    CONFIGURACIÓN
-   - Quitar logo en pantalla setup
 ===================== */
 #setup-screen{
   justify-content: flex-start;
 }
 
-/* ✅ oculta el logo SOLO en configuración */
+/* ❌ sin logo en configuración */
 #setup-screen .guardianes-top{
   display: none !important;
 }
@@ -203,6 +191,11 @@ h1, h2, label{
   justify-content: flex-start;
 }
 
+/* ❌ quitar logo Guardianes DURANTE el juego */
+#game-screen .guardianes-game{
+  display: none !important;
+}
+
 #top-bar{
   width: 100%;
   position: relative;
@@ -214,7 +207,6 @@ h1, h2, label{
   align-items: center;
 
   background: rgba(0,0,0,0.25);
-  backdrop-filter: blur(3px);
 }
 
 #timer{
@@ -262,16 +254,6 @@ h1, h2, label{
 
   transform: translate(var(--goal-x), -50%);
   pointer-events: none;
-  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.45));
-}
-
-.guardianes-game{
-  width: min(300px, 62vw);
-  height: auto;
-  max-height: none;
-  object-fit: contain;
-  margin: 10px auto 6px;
-  filter: drop-shadow(0 8px 18px rgba(0,0,0,0.35));
 }
 
 /* =====================
@@ -292,7 +274,6 @@ h1, h2, label{
 
   padding: 42px 34px;
   border-radius: 18px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
 }
 
 #question{
@@ -323,31 +304,19 @@ h1, h2, label{
   background: rgba(255,255,255,0.92);
 }
 
-.option-btn:disabled{ cursor: default; opacity: 0.98; }
 .option-btn.correct{ background: rgba(56,178,72,0.9); color:#fff; }
 .option-btn.wrong{ background: rgba(220,38,38,0.9); color:#fff; }
 
-.feedback{
-  min-height: 44px;
-  margin-top: 14px;
-  font-weight: 900;
-  color: #111;
-  max-width: 650px;
-}
-
 /* =====================
-   FINAL + CONFETI
+   FINAL
 ===================== */
 .end-screen{
-  position: relative;
   gap: 14px;
 }
 
 #confetti{
   position: fixed;
   inset: 0;
-  width: 100vw;
-  height: 100vh;
   pointer-events: none;
   z-index: 1;
 }
@@ -358,73 +327,26 @@ h1, h2, label{
 }
 
 /* =====================
-   MÓVIL (sin scroll + ocultar logos excepto inicio)
+   MÓVIL
 ===================== */
 @media (max-width: 768px){
   .screen{
     height: 100dvh;
-    min-height: 100dvh;
-    padding: clamp(10px, 2.5vw, 16px);
-    gap: clamp(10px, 2.2vw, 16px);
-  }
-
-  /* oculta logos en móvil fuera del inicio */
-  .guardianes-top,
-  .guardianes-game{
-    display: none !important;
+    padding: 16px;
+    gap: 16px;
   }
 
   .guardianes-start{
-    width: min(520px, 78vw);
-    max-height: 34dvh;
-    margin-bottom: clamp(14px, 3.5vw, 26px);
+    width: min(420px, 80vw);
   }
 
   .img-btn img{
-    max-height: 16dvh;
+    width: min(260px, 80vw);
   }
-
-  #game-screen{ justify-content: flex-start; }
 
   #question-box{
-    flex: 1;
     min-height: 0;
-    max-height: 58dvh;
-    padding: clamp(16px, 3.6vw, 34px) clamp(14px, 3.2vw, 28px);
-    margin-top: 8px;
+    flex: 1;
+    padding: 24px 18px;
   }
-
-  #question{
-    font-size: clamp(15px, 4vw, 19px);
-    margin-bottom: 10px;
-  }
-
-  .option-btn{
-    font-size: clamp(13px, 3.4vw, 16px);
-  }
-
-  #teams-track{
-    height: clamp(52px, 9vw, 70px);
-  }
-
-  .team-icon{
-    width: clamp(30px, 7vw, 42px);
-    height: clamp(30px, 7vw, 42px);
-  }
-
-  .goal-icon{
-    width: clamp(40px, 9vw, 56px);
-    height: clamp(40px, 9vw, 56px);
-  }
-
-  #timer{
-    font-size: clamp(14px, 3.8vw, 20px);
-    right: 10px;
-  }
-}
-
-@media (max-height: 680px){
-  .guardianes-start{ max-height: 30dvh; }
-  .img-btn img{ max-height: 14dvh; }
-  #question-box{ max-height: 54dvh; }
 }
