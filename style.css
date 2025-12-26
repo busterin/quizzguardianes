@@ -373,4 +373,25 @@ h1, h2, label{
   text-align: center;
   cursor: pointer;
 }
+/* =====================
+   AJUSTE FINO INICIO: MÁS AIRE EN LOS BORDES
+===================== */
 
+/* Baja ligeramente título y subtítulo */
+.start-screen .game-title{
+  margin-top: 10px;
+}
+
+.start-screen .game-subtitle{
+  margin-top: 6px;
+}
+
+/* Sube el botón comenzar */
+.start-screen .img-btn{
+  margin-top: -10px;
+}
+
+/* Seguridad extra: evita solapes */
+.start-screen .guardianes-start{
+  margin-bottom: 18px;
+}
