@@ -405,7 +405,7 @@ h1, h2, label{
    JUEGO: BARRA SUPERIOR OPACA
 ===================== */
 #top-bar{
-  background: #000000;   /* opaco */
+  background: #111;   /* opaco */
   backdrop-filter: none; /* por si había blur */
 }
 
