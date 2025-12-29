@@ -401,3 +401,11 @@ h1, h2, label{
 #start-screen .guardianes-start{
   display: none !important;
 }
+/* =====================
+   JUEGO: BARRA SUPERIOR OPACA
+===================== */
+#top-bar{
+  background: #000000;   /* opaco */
+  backdrop-filter: none; /* por si había blur */
+}
+
